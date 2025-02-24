@@ -6,6 +6,11 @@ a Python script that provides some stats about Nginx logs stored in MongoDB
 
 from pymongo import MongoClient
 client = MongoClient()
+
+
+"""
+a Python script that provides some stats about Nginx logs stored in MongoDB
+"""
 collection = client.logs.nginx
 print("{} logs".format(collection.count_documents({})))
 print("Methods:")
