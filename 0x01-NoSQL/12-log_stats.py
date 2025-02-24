@@ -23,7 +23,7 @@ def log_stats():
         print("\tmethod {}: {}".format(method, count))
 
     stats = collection.count_documents({"method": "GET", "path": "/status"})
-    print("{} status check".format(status_count))
+    print("{} status check".format(stats))
 
 
 if __name__ == "__main__":
