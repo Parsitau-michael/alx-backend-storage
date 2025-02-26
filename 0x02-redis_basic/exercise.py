@@ -14,11 +14,10 @@ def count_calls(method: Callable) -> Callable:
     methods of the Cache class are called.
     """
     @wraps(method)
-    def wrapper(*args, **kwargs):
-        self = args[0]
+    def wrapper(self, *args, **kwargs):
         key = method.__qualname__
         self._redis.incr(key)
-        return method(*args, **kwargs)
+        return method(self, *args, **kwargs)
     return wrapper
 
 
