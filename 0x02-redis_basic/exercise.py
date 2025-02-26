@@ -9,15 +9,15 @@ from typing import Union, Optional, Callable
 from functools import wraps
 
 
-def count_calls(f: Callable) -> Callable:
+def count_calls(method: Callable) -> Callable:
     """Defining a decorator to count how many times
     methods of the Cache class are called.
     """
-    @wraps(f)
+    @wraps(method)
     def wrapper(*args, **kwargs):
         self = args[0]
-        self._redis.incr(f.__qualname__)
-        return f(*args, **kwargs)
+        self._redis.incr(method.__qualname__)
+        return method(*args, **kwargs)
     return wrapper
 
 
