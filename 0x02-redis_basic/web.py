@@ -16,14 +16,18 @@ r = redis.Redis()
 def count_requests(method: Callable) -> Callable:
     """Decorator to count the number of times a url was accessed"""
     @wraps(method)
-    def wrapper(url: str):
+    def wrapper(url: str) -> str:
         r.incr(f"count:{url}")
         cached_content = r.get(url)
 
         if cached_content:
             return cached_content.decode("utf-8")
 
-        response = method(url)
+        try:
+            response = method(url)
+        except requests.exceptions.RequestException as e:
+            raise Exception(e)
+
         r.setex(url, 10, response.encode("utf-8"))
         return response
     return wrapper
@@ -35,6 +39,7 @@ def get_page(url: str) -> str:
     "count:{url}" and cache the result with an expiration time of 10 seconds.
     """
     response = requests.get(url)
+    response.raise_for_status()
     return response.text
 
 
