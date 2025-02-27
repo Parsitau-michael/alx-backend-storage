@@ -18,13 +18,13 @@ def count_requests(method: Callable) -> Callable:
     @wraps(method)
     def wrapper(url: str):
         r.incr(f"count:{url}")
-        cached_content = r.get(f"cache:{url}")
+        cached_content = r.get(url)
 
         if cached_content:
             return cached_content.decode("utf-8")
 
         response = method(url)
-        r.setex(f"cache:{url}", 10, response.encode("utf-8"))
+        r.setex(url, 10, response.encode("utf-8"))
         return response
     return wrapper
 
