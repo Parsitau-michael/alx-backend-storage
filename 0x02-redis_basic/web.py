@@ -17,8 +17,11 @@ def count_requests(method: Callable) -> Callable:
     """Decorator to count the number of times a url was accessed"""
     @wraps(method)
     def wrapper(url: str) -> str:
-        r.incr(f"count:{url}")
-        cached_content = r.get(url)
+        count_key = f"count:{url}"
+        cache_key = f"cache:{url}"
+
+        r.incr(count_key)
+        cached_content = r.get(cache_key)
 
         if cached_content:
             return cached_content.decode("utf-8")
@@ -28,7 +31,7 @@ def count_requests(method: Callable) -> Callable:
         except requests.exceptions.RequestException as e:
             raise Exception(e)
 
-        r.setex(url, 10, response.encode("utf-8"))
+        r.setex(cache_key, 10, response.encode("utf-8"))
         return response
     return wrapper
 
