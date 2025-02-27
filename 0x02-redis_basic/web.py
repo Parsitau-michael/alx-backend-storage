@@ -31,7 +31,7 @@ def count_requests(method: Callable) -> Callable:
         except requests.exceptions.RequestException as e:
             raise Exception(e)
 
-        r.setex(cache_key, 10, response.encode("utf-8"))
+        r.setex(cache_key, 10, response)
         return response
     return wrapper
 
@@ -43,9 +43,8 @@ def get_page(url: str) -> str:
     """
     response = requests.get(url)
     response.raise_for_status()
-    return response.text
+    return response.content
 
 
 if __name__ == "__main__":
-    print(get_page("http://google.com"))
     print(get_page("http://slowwly.robertomurray.co.uk"))
