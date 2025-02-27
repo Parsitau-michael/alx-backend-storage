@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """This module is of a function get_page, that uses the requests
 module to obtain the HTML content of a particular URL and returns it.
 """
